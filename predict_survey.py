@@ -1,6 +1,7 @@
 import joblib
 import pandas as pd
 import os
+import numpy as np
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -30,7 +31,6 @@ def load_all():
 
         # Only load when needed (prevent Render crash)
         from sentence_transformers import SentenceTransformer
-        from sentence_transformers import util
         embedder = SentenceTransformer("all-MiniLM-L6-v2")
         print("Models Loaded Successfully!")
 
@@ -40,5 +40,41 @@ def load_all():
 def predict(data):
     model, feature_encoders, target_encoder, riasec_encoder, course_df, embedder = load_all()
 
-    # your ML logic ...
-    # (no change required)
+    # === Example ML pipeline ===
+    # 1. Extract features from incoming JSON
+    features = []
+    for col in feature_encoders.keys():
+        val = data.get(col, "")
+        encoder = feature_encoders[col]
+        encoded_val = encoder.transform([val])[0]
+        features.append(encoded_val)
+
+    X = np.array(features).reshape(1, -1)
+
+    # 2. Run prediction
+    y_pred = model.predict(X)[0]
+    y_score = max(model.predict_proba(X)[0])  # highest probability
+
+    # 3. Decode target
+    recommended_course = target_encoder.inverse_transform([y_pred])[0]
+
+    # 4. Find description from course_df
+    desc_row = course_df.loc[course_df['course'] == recommended_course]
+    recommended_description = (
+        desc_row['description'].values[0] if not desc_row.empty else "No description available."
+    )
+
+    # 5. Suggested alternative (optional: top 2nd course)
+    proba = model.predict_proba(X)[0]
+    top2_idx = np.argsort(proba)[::-1][1]  # second highest
+    suggested_course = target_encoder.inverse_transform([top2_idx])[0]
+    suggested_score = float(proba[top2_idx])
+
+    # === Return JSON-friendly dict ===
+    return {
+        "recommended_course": recommended_course,
+        "recommended_score": float(y_score),
+        "suggested_course": suggested_course,
+        "suggested_score": suggested_score,
+        "recommended_description": recommended_description,
+    }
