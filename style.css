@@ -1,0 +1,126 @@
+ 
+ 
+ * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { display: flex; height: 100vh; background: #f8f9fa; }
+    /* MAIN CONTENT */
+    .main-content { flex: 1; padding: 20px; overflow-y: auto; }
+
+  /* MODERN SIDEBAR */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #2c1f0b 0%, #1d3557 100%); /* Brown to Navy gradient */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  opacity: 1;
+  transition: width 0.3s ease;
+}
+
+.sidebar h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-weight: 700;
+  color: #f4c430; /* Golden yellow */
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 8px;
+  transition: background 0.3s, transform 0.2s;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.sidebar a span {
+  margin-left: 10px;
+}
+
+.sidebar a:hover {
+  background: rgba(244, 196, 48, 0.2); /* Soft yellow hover */
+  transform: translateX(5px);
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: width 0.3s ease, padding 0.3s ease, visibility 0.3s ease;
+  opacity: 0;
+}
+
+/* Optional: hide footer explicitly */
+.sidebar.collapsed .sidebar-footer {
+  display: none;
+}
+
+/* Adjust main content when sidebar is collapsed */
+.main-content.collapsed-adjust {
+  margin-left: 0 !important;
+  transition: margin-left 0.3s ease;
+}
+
+.toggle-btn {
+  font-size: 24px;
+  color: #f4c430;
+  background-color: #1d3557;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.profile-card {
+  flex: 1;
+  max-width: 600px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+.suggestion-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+
+  /* Hide scrollbar by default */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* WebKit browsers (Chrome, Safari, Edge) */
+.suggestion-scroll::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Show scrollbar only while scrolling */
+.suggestion-scroll:hover::-webkit-scrollbar {
+  width: 8px;
+}
+
+.suggestion-scroll:hover::-webkit-scrollbar-thumb {
+  background-color: #457b9d;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
+}
