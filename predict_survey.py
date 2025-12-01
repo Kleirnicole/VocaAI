@@ -14,7 +14,6 @@ FEATURE_ENCODERS_FILE = os.path.join(BASE_DIR, "feature_encoders.pkl")
 TARGET_ENCODER_FILE = os.path.join(BASE_DIR, "target_encoder.pkl")
 RIASEC_ENCODER_FILE = os.path.join(BASE_DIR, "riasec_encoder.pkl")
 
-app = Flask(__name__)
 
 # ---------------- HELPER FUNCTIONS ----------------
 def load_model_and_encoders():
@@ -90,19 +89,4 @@ def predict(data):
         "ml_top_scores": [round(probs[i]*100,2) for i in top_indices]
     }
 
-# ---------------- API ROUTE ----------------
-@app.route("/predict", methods=["POST"])
-def predict_api():
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "No JSON provided"}), 400
-    try:
-        result = predict(data)
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
-# ---------------- RUN ----------------
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
