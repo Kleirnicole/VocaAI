@@ -10,8 +10,8 @@ def predict_api():
         return jsonify({"error": "No input JSON provided"}), 400
 
     try:
-        result = predict(data)
-        return jsonify(result)
+        res = predict(data)
+        return jsonify(res)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
