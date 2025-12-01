@@ -1,10 +1,8 @@
-flask
-flask-cors
-joblib
+Flask==3.0.3
 pandas
-scikit-learn
-numpy
+joblib
 sentence-transformers
 torch
-transformers
 openpyxl
+numpy
+scikit-learn
